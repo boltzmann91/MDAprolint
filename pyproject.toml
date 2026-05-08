@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "MDAprolint"
-version = "0.1.1"
-description = "A fast tool for analyzing membrane protein-lipid interactions in MD simulation trajectories. Based on MDAnalysis and Prolint"
+version = "0.1.2"
+description = "A fast tool for analyzing membrane protein-lipid interactions in MD simulation trajectories. Based on MDAnalysis and and the principles of Prolint."
 readme = "README.md"
 requires-python = ">=3.8"
 dependencies = [
@@ -16,3 +16,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest", "matplotlib"]
+
+[project.urls]
+Homepage = "https://github.com/boltzmann91/MDAprolint"
+Issues = "https://github.com/boltzmann91/MDAprolint/issues"

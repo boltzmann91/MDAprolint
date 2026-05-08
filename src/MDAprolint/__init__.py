@@ -1,11 +1,12 @@
-# Import the specific functions you want to expose to the user
-from .core import get_interacting_lipids
-from .core import calculate_residence_times
-from .core import get_lipid_protein_distances
+# Import the functions from their specific modules
+from .interactions import get_interacting_lipids_openmp
+from .kinetics import calculate_residence_times
+from .distances import get_lipid_protein_distances
 
-# Optional: define __all__ to restrict what is imported with 'from lipid_interactions import *'
+# Expose them to the user
 __all__ = [
-    "get_interacting_lipids",
+    "get_interacting_lipids_openmp",
     "calculate_residence_times",
     "get_lipid_protein_distances"
 ]
+
