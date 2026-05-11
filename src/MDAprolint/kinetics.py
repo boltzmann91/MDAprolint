@@ -1,54 +1,46 @@
 import pandas as pd
 
 def calculate_residence_times(interactions_per_frame, frame_time):
-    """
-    Calculates the interaction start time, end time, and continuous duration.
-    
-    Parameters:
-    - interactions_per_frame: List of dicts (output from interactions.py).
-    - frame_time: Time elapsed between consecutive analyzed frames in picoseconds (ps).
-    
-    Returns:
-    - Pandas DataFrame of all continuous binding events.
-    """
+    # Now stores {lipid_id: (start_time, protein_resid)}
     active_interactions = {} 
     all_events = []          
     
-    print("Calculating residence and cumulative times...")
+    print("Calculating residence times and binding sites...")
     
     for step_index, frame_data in enumerate(interactions_per_frame):
-        current_lipids = frame_data['lipids']
+        # current_lipids is now a dict: {lipid_id: protein_resid}
+        current_lipids = frame_data['lipids'] 
         current_time = step_index * frame_time
         
+        # 1. Check for ended interactions
         for lipid in list(active_interactions.keys()):
             if lipid not in current_lipids:
-                start_time = active_interactions.pop(lipid)
-                end_time = current_time
-                duration = end_time - start_time
+                start_time, prot_resid = active_interactions.pop(lipid)
+                duration = current_time - start_time
                 
                 all_events.append({
                     'lipid_id': lipid,
+                    'protein_resid': prot_resid, # <--- NEW!
                     'start_time': start_time,
-                    'end_time': end_time,
+                    'end_time': current_time,
                     'duration': duration
                 })
                 
-        for lipid in current_lipids:
+        # 2. Check for new interactions
+        for lipid, prot_resid in current_lipids.items():
             if lipid not in active_interactions:
-                active_interactions[lipid] = current_time
+                # Record the time and the binding site
+                active_interactions[lipid] = (current_time, prot_resid)
                 
-    final_step_index = len(interactions_per_frame) - 1
-    final_time = final_step_index * frame_time
-    
-    for lipid, start_time in active_interactions.items():
-        end_time = final_time
-        duration = end_time - start_time
-        
+    # 3. Handle lipids still interacting at the end
+    final_time = (len(interactions_per_frame) - 1) * frame_time
+    for lipid, (start_time, prot_resid) in active_interactions.items():
         all_events.append({
             'lipid_id': lipid,
+            'protein_resid': prot_resid, # <--- NEW!
             'start_time': start_time,
-            'end_time': end_time,
-            'duration': duration
+            'end_time': final_time,
+            'duration': final_time - start_time
         })
         
     df = pd.DataFrame(all_events)
@@ -56,3 +48,4 @@ def calculate_residence_times(interactions_per_frame, frame_time):
         df = df.sort_values(by=['lipid_id', 'start_time']).reset_index(drop=True)
         
     return df
+    
