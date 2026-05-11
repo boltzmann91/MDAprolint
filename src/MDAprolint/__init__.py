@@ -2,11 +2,12 @@
 from .interactions import get_interacting_lipids
 from .kinetics import calculate_residence_times
 from .distances import get_lipid_protein_distances
+from .cutoffs import calculate_optimal_cutoff
 
-# Expose them to the user
 __all__ = [
-    "get_interacting_lipids"
+    "get_interacting_lipids",
     "calculate_residence_times",
-    "get_lipid_protein_distances"
+    "get_lipid_protein_distances",
+    "calculate_optimal_cutoff"
 ]
 
