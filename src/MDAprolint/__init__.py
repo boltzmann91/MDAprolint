@@ -2,7 +2,6 @@ from .interactions import get_interacting_lipids
 from .kinetics import calculate_residence_times
 from .distances import get_lipid_protein_distances
 from .cutoffs import calculate_optimal_cutoffs
-# NEW IMPORTS
 from .occupancy import calculate_occupancy, plot_occupancy, export_occupancy_bfactors
 
 __all__ = [
@@ -12,5 +11,5 @@ __all__ = [
     "calculate_optimal_cutoffs",
     "calculate_occupancy",           
     "plot_occupancy",                
-    "export_occupancy_bfactors" 
+    "export_occupancy_bfactors"
 ]
