@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "MDAprolint"
-version = "0.4.0"
+version = "0.5.0"
 description = "A fast python package that uses MDAnalysis and its openmp backend to calculate lipid-protein interactions, lipid-protein distances, and lipid residence times. Based on the principles of Prolint."
 readme = "README.md"
 requires-python = ">=3.8"
