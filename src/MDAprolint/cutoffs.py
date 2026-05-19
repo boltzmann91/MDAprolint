@@ -1,14 +1,15 @@
 import os
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.interpolate import UnivariateSpline
+from scipy.ndimage import gaussian_filter1d
+from scipy.signal import find_peaks
 
 from .distances import get_lipid_protein_distances
 
-def calculate_optimal_cutoffs(u, prot_sel, lip_sel, step=1, max_dist=15.0, bins=200, sigma=1.0):
+def calculate_optimal_cutoffs(u, prot_sel, lip_sel, step=1, max_dist=15.0, bins=200, sigma=1.0, use_com=False, save_plot=False):
     """
-    Calculates distances, generates a density curve, and uses spline calculus
-    to detect the optimal dual-cutoffs. 
+    Calculates distances, generates a density curve, and and finds peaks
+    and valleys to determine upper and lower cutoff.
     
     Parameters:
     - u: MDAnalysis Universe object.
@@ -17,7 +18,8 @@ def calculate_optimal_cutoffs(u, prot_sel, lip_sel, step=1, max_dist=15.0, bins=
     - step (int): Frame step size for reading the trajectory.
     - max_dist (float): Maximum distance to analyze on the x-axis.
     - bins (int): Number of bins for the high-res histogram.
-    - smoothing (float): Smoothing factor for the spline fit.
+    - sigma (float): Smoothing factor for the gaussian fit.
+    - use_com (bool): If True, uses center of mass of selection of atoms per lipid molecule to calculate distances (Default: False). 
     - save_plot (bool): If True, generates and saves a diagnostic plot (Default: False).
     
     Returns:
@@ -28,9 +30,9 @@ def calculate_optimal_cutoffs(u, prot_sel, lip_sel, step=1, max_dist=15.0, bins=
     import matplotlib.pyplot as plt
     
     print("--- Step 1: Calculating distances for cutoff analysis ---")
-    lip_resids, dist_array, nearest_resids = get_lipid_protein_distances(u, prot_sel, lip_sel, step=step)
+    lip_resids, dist_array, nearest_resids = get_lipid_protein_distances(u, prot_sel, lip_sel, step=step, use_com=use_com)
     
-    print("--- Step 2: Applying spline calculus to find exact cutoffs ---")
+    print("--- Step 2: Fitting a curve to the histogram to find exact cutoffs ---")
     all_distances = dist_array.flatten()
     
     # Generate the raw numerical inputs (X and Y)
@@ -63,7 +65,7 @@ def calculate_optimal_cutoffs(u, prot_sel, lip_sel, step=1, max_dist=15.0, bins=
         
     ax.hist(all_distances, bins=bins, range=(0, max_dist), density=True, 
                 color='lightgray', edgecolor='none', label='Raw Histogram')
-    ax.plot(x_smooth, y_smooth, color='blue', linewidth=2.5, label='Fitted Spline')
+    ax.plot(bin_centers, smoothed_curve, color='blue', linewidth=2.5, label='Fitted Curve')
         
     ax.axvline(lower_cutoff, color='green', linestyle='--', linewidth=2,
                    label=f'Lower Cutoff (Peak): {lower_cutoff:.2f} Å')
