@@ -3,7 +3,7 @@
 # MDAprolint 
 **MDAnalysis to examine Protein-Lipid Interactions**
 
-`MDAprolint` is a high-performance Python package designed to analyze lipid-protein interactions in Molecular Dynamics (MD) simulations. Built on top of `MDAnalysis` and principles of Prolint, `MDAprolint` is accelerated by OpenMP and provides a mathematically rigorous, end-to-end pipeline for calculating lipid residence times, filtering out MD noise, and visualizing 3D binding hotspots.
+`MDAprolint` is a high-performance Python package designed to analyze lipid-protein interactions in Molecular Dynamics (MD) simulations. Built on top of `MDAnalysis` and principles of Prolint, `MDAprolint` is accelerated by OpenMP and provides an end-to-end pipeline for calculating lipid residence times, filtering out MD noise, and visualizing 3D binding hotspots.
 
 ## ✨ Key Features
 * **Automated Dual-Cutoff Detection:** Empirically calculates primary annular shell boundaries from your trajectory data using distance distributions and Gaussian smoothing.
@@ -37,7 +37,7 @@ pip install -e .
 
 ## 🚀 Quick Start Workflow
 
-Here is a complete, copy-pasteable script that takes you from a raw trajectory to a 3D PyMOL hotspot structure in just a few lines of code.
+Here is a suggested workflow that takes you from a raw trajectory to a 3D PyMOL hotspot structure in just a few lines of code.
 
 ```python
 import MDAnalysis as mda
@@ -109,7 +109,7 @@ hide all
 show surface
 spectrum b, white_red
 ```
-Areas colored **white** indicate 0% lipid occupancy, while areas colored **dark red** indicate high-affinity binding pockets!
+Areas colored **white** indicate 0% lipid occupancy, while areas colored **dark red** indicate high-affinity binding pockets.
 
 ---
 
